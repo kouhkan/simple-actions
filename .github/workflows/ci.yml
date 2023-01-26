@@ -28,10 +28,17 @@ jobs:
         source venv/bin/activate
         pip install -r requirements.txt
 
-    - name: Run tests
+    - name: Run tests and coverage
       run: |
         source venv/bin/activate
-        pytest
+        coverage run -m pytest
+        coverage report -m
+
+    - name: Check coverage
+      if: success()
+      run: |
+        coverage_threshold=40
+        coverage_line=$(coverage report | awk 'FNR == 3 {print $NF
 
     - name: Build and push Docker image
       if: success()
